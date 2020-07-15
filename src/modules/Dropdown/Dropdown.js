@@ -165,6 +165,9 @@ export default class Dropdown extends Component {
     /** Message to display when there are no results. */
     noResultsMessage: PropTypes.node,
 
+    /** Set options into a popper container to fixed overflow:scroll */
+    popperContainer: PropTypes.any,
+
     /**
      * Called when a user adds a new item. Use this to update the options list.
      *
@@ -419,12 +422,12 @@ export default class Dropdown extends Component {
       if (hasValue && nextProps.multiple && !isNextValueArray) {
         console.error(
           'Dropdown `value` must be an array when `multiple` is set.' +
-            ` Received type: \`${Object.prototype.toString.call(nextProps.value)}\`.`,
+          ` Received type: \`${Object.prototype.toString.call(nextProps.value)}\`.`,
         )
       } else if (hasValue && !nextProps.multiple && isNextValueArray) {
         console.error(
           'Dropdown `value` must not be an array when `multiple` is not set.' +
-            ' Either set `multiple={true}` or use a string or number value.',
+          ' Either set `multiple={true}` or use a string or number value.',
         )
       }
     }
@@ -1315,10 +1318,17 @@ export default class Dropdown extends Component {
       return cloneElement(menuChild, { className, ...ariaOptions })
     }
 
+    let PopperContainer = <></>;
+    if (this.popperContainer) {
+      PopperContainer = this.popperContainer;
+    }
+
     return (
       <DropdownMenu {...ariaOptions} direction={direction} open={open}>
         {DropdownHeader.create(header, { autoGenerateKey: false })}
-        {this.renderOptions()}
+        <PopperContainer>
+          {this.renderOptions()}
+        </PopperContainer>
       </DropdownMenu>
     )
   }
