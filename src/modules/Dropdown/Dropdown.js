@@ -166,7 +166,7 @@ export default class Dropdown extends Component {
     noResultsMessage: PropTypes.node,
 
     /** Set options into a popper container to fixed overflow:scroll */
-    popperContainer: PropTypes.any,
+    popperContainer: PropTypes.node,
 
     /**
      * Called when a user adds a new item. Use this to update the options list.
@@ -376,6 +376,7 @@ export default class Dropdown extends Component {
     selectOnBlur: true,
     selectOnNavigation: true,
     wrapSelection: true,
+    popperContainer: undefined,
   }
 
   static autoControlledProps = ['open', 'searchQuery', 'selectedLabel', 'value', 'upward']
@@ -422,12 +423,12 @@ export default class Dropdown extends Component {
       if (hasValue && nextProps.multiple && !isNextValueArray) {
         console.error(
           'Dropdown `value` must be an array when `multiple` is set.' +
-          ` Received type: \`${Object.prototype.toString.call(nextProps.value)}\`.`,
+            ` Received type: \`${Object.prototype.toString.call(nextProps.value)}\`.`,
         )
       } else if (hasValue && !nextProps.multiple && isNextValueArray) {
         console.error(
           'Dropdown `value` must not be an array when `multiple` is not set.' +
-          ' Either set `multiple={true}` or use a string or number value.',
+            ' Either set `multiple={true}` or use a string or number value.',
         )
       }
     }
@@ -1305,8 +1306,30 @@ export default class Dropdown extends Component {
     )
   }
 
+  renderPopperContainer = () => {
+    const { popperContainer } = this.props
+    const PopperContainer = popperContainer
+    return (
+      <PopperContainer
+        style={{
+          position: 'absolute',
+          top: this.ref.current
+            ? this.ref.current.getBoundingClientRect().top + this.ref.current.offsetHeight
+            : 0,
+          left: this.ref.current ? this.ref.current.getBoundingClientRect().left : 0,
+          width: this.ref.current ? this.ref.current.offsetWidth : 0,
+        }}
+      >
+        <DropdownMenu {...ariaOptions} direction={direction} open={open}>
+          {DropdownHeader.create(header, { autoGenerateKey: false })}
+          {this.renderOptions()}
+        </DropdownMenu>
+      </PopperContainer>
+    )
+  }
+
   renderMenu = () => {
-    const { children, direction, header } = this.props
+    const { children, direction, header, popperContainer } = this.props
     const { open } = this.state
     const ariaOptions = this.getDropdownMenuAriaOptions()
 
@@ -1318,17 +1341,14 @@ export default class Dropdown extends Component {
       return cloneElement(menuChild, { className, ...ariaOptions })
     }
 
-    let PopperContainer = <></>;
-    if (this.popperContainer) {
-      PopperContainer = this.popperContainer;
+    if (popperContainer) {
+      return renderPopperContainer()
     }
 
     return (
       <DropdownMenu {...ariaOptions} direction={direction} open={open}>
         {DropdownHeader.create(header, { autoGenerateKey: false })}
-        <PopperContainer>
-          {this.renderOptions()}
-        </PopperContainer>
+        {this.renderOptions()}
       </DropdownMenu>
     )
   }

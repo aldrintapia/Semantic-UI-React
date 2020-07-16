@@ -1,6 +1,6 @@
 {
-  "name": "semantic-ui-react",
-  "version": "0.88.2",
+  "name": "semantic-ui-react-bpm",
+  "version": "0.1.0",
   "description": "The official Semantic-UI-React integration.",
   "jsnext:main": "dist/es/index.js",
   "main": "dist/commonjs/index.js",
@@ -68,14 +68,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://github.com/Semantic-Org/Semantic-UI-React.git"
+    "url": "https://github.com/aldrintapia/Semantic-UI-React.git"
   },
   "author": "Levi Thomason <me@levithomason.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Semantic-Org/Semantic-UI-React/issues"
+    "url": "https://github.com/aldrintapia/Semantic-UI-React.git/issues"
   },
-  "homepage": "https://github.com/Semantic-Org/Semantic-UI-React#readme",
+  "homepage": "https://github.com/aldrintapia/Semantic-UI-React.git#readme",
   "dependencies": {
     "@babel/runtime": "^7.1.2",
     "@semantic-ui-react/event-stack": "^3.1.0",
