@@ -1307,8 +1307,18 @@ export default class Dropdown extends Component {
   }
 
   renderPopperContainer = () => {
-    const { popperContainer } = this.props
+    const { children, direction, header, popperContainer } = this.props
+    const { open } = this.state
     const PopperContainer = popperContainer
+    const ariaOptions = this.getDropdownMenuAriaOptions()
+
+    // single menu child
+    if (!childrenUtils.isNil(children)) {
+      const menuChild = Children.only(children)
+      const className = cx(direction, useKeyOnly(open, 'visible'), menuChild.props.className)
+
+      return cloneElement(menuChild, { className, ...ariaOptions })
+    }
     return (
       <PopperContainer
         style={{
@@ -1329,7 +1339,7 @@ export default class Dropdown extends Component {
   }
 
   renderMenu = () => {
-    const { children, direction, header, popperContainer } = this.props
+    const { children, direction, header } = this.props
     const { open } = this.state
     const ariaOptions = this.getDropdownMenuAriaOptions()
 
@@ -1339,10 +1349,6 @@ export default class Dropdown extends Component {
       const className = cx(direction, useKeyOnly(open, 'visible'), menuChild.props.className)
 
       return cloneElement(menuChild, { className, ...ariaOptions })
-    }
-
-    if (popperContainer) {
-      return renderPopperContainer()
     }
 
     return (
@@ -1379,6 +1385,7 @@ export default class Dropdown extends Component {
       scrolling,
       simple,
       trigger,
+      popperContainer,
     } = this.props
     const { focus, open, upward } = this.state
 
@@ -1438,7 +1445,7 @@ export default class Dropdown extends Component {
             overrideProps: this.handleIconOverrides,
             autoGenerateKey: false,
           })}
-          {this.renderMenu()}
+          {popperContainer ? this.renderPopperContainer() : this.renderMenu()}
 
           {open && <EventStack name='keydown' on={this.closeOnEscape} />}
           {open && <EventStack name='keydown' on={this.moveSelectionOnKeyDown} />}
