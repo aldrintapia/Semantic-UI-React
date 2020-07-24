@@ -122,7 +122,7 @@ export interface StrictDropdownProps {
   noResultsMessage?: React.ReactNode
 
   /** Set options into a popper container to fixed overflow:scroll */
-  popperContainer?: React.ReactNode
+  popperContainer?: any
 
   /**
    * Called when a user adds a new item. Use this to update the options list.

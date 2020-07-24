@@ -166,7 +166,7 @@ export default class Dropdown extends Component {
     noResultsMessage: PropTypes.node,
 
     /** Set options into a popper container to fixed overflow:scroll */
-    popperContainer: PropTypes.node,
+    popperContainer: PropTypes.any,
 
     /**
      * Called when a user adds a new item. Use this to update the options list.
@@ -1329,6 +1329,7 @@ export default class Dropdown extends Component {
           left: this.ref.current ? this.ref.current.getBoundingClientRect().left : 0,
           width: this.ref.current ? this.ref.current.offsetWidth : 0,
         }}
+        parentRef={this.ref}
       >
         <DropdownMenu {...ariaOptions} direction={direction} open={open}>
           {DropdownHeader.create(header, { autoGenerateKey: false })}
